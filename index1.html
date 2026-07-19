@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistem Error</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00ff00;
+            font-family: monospace;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden; 
+            touch-action: none; 
+            user-select: none; 
+        }
+        #terminal-text {
+            font-size: 1.1rem;
+            white-space: pre-wrap;
+        }
+        .glitch-screen {
+            display: none;
+            color: red;
+            font-weight: bold;
+            font-size: 2.5rem;
+            margin-top: 60%;
+            text-align: center;
+            animation: blink 0.1s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body onclick="triggerFatalError()">
+
+    <div id="terminal-text">Menginisiasi koneksi...
+Berhasil masuk ke sistem.
+Mengunduh data internal...</div>
+    
+    <div id="fatal-error" class="glitch-screen">
+        FATAL ERROR<br>SYSTEM FROZEN
+    </div>
+
+    <script>
+        const terminalTexts = [
+            "Mengekstrak foto dan riwayat chat...",
+            "Menghapus enkripsi lokal...",
+            "Bypass security protocol: SUCCESS",
+            "WARNING: Memory overload terdeteksi...",
+            "Menjalankan script pengunci sistem..."
+        ];
+        
+        let i = 0;
+        let msgDiv = document.getElementById("terminal-text");
+        let errorTriggered = false; // Mencegah trigger berulang
+        
+        // Teks terminal
+        let interval = setInterval(() => {
+            if (i < terminalTexts.length) {
+                msgDiv.innerHTML += "\n\n" + terminalTexts[i];
+                i++;
+            } else {
+                clearInterval(interval);
+                msgDiv.innerHTML += "\n\n[Sistem tidak merespons. Ketuk layar untuk membatalkan]";
+            }
+        }, 1200);
+
+        // Fungsi saat layar disentuh
+        function triggerFatalError() {
+            if (errorTriggered) return; 
+            errorTriggered = true;
+
+            // Ganti tampilan ke Fatal Error
+            msgDiv.style.display = "none";
+            document.getElementById("fatal-error").style.display = "block";
+            
+            // Fitur Getar (Vibration API) - Khusus Android
+            if (navigator.vibrate) {
+                // Getaran awal yang panjang
+                navigator.vibrate([1000, 200, 1000, 200, 1000]); 
+                
+                // Looping getaran terus menerus setiap 2.5 detik
+                setInterval(() => {
+                    navigator.vibrate([800, 100, 800, 100, 800]);
+                }, 2500);
+            }
+        }
+    </script>
+</body>
+</html>
